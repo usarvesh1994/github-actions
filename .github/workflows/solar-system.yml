@@ -12,7 +12,13 @@ env:
 
 jobs:
   unit_testing:
-    runs-on: ubuntu-latest
+    name: Unit Testing
+    strategy:
+      matrix:
+        nodejs_version: [18, 19, 20]
+        os: [ubuntu-latest]
+    runs-on: ${{matrix.os}}
+
     steps:
       - name: Checkout Registry
         uses: actions/checkout@v4
@@ -20,7 +26,7 @@ jobs:
       - name: Node JS Setups
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: ${{matrix.nodejs_version}}
 
       - name: Install Dependencies
         run: npm install
