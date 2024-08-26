@@ -43,7 +43,6 @@ jobs:
   code_coverage:
     name: Code Coverage
     runs-on: ubuntu-latest
-    continue-on-error: true
     steps:
       - name: Checkout Registry
         uses: actions/checkout@v4
@@ -58,6 +57,7 @@ jobs:
 
       - name: Check Code Coverage
         run: npm run coverage
+        continue-on-error: true
 
       - name: Archive test results
         uses: actions/upload-artifact@v4
