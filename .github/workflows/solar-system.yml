@@ -66,4 +66,4 @@ jobs:
           name: Code-Coverage-Result
           path: coverage
           retention-days: 1
-        if: steps.node-code-coverage.outcome == 'failure' || steps.node-code-coverage.outcome == 'success'
+        if: failure() || steps.node-code-coverage.outcome == 'failure' || steps.node-code-coverage.outcome == 'success'
