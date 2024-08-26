@@ -13,7 +13,7 @@ jobs:
       - name: Checkout Registry
         uses: actions/checkout@v4
 
-      - name: Node JS Setup
+      - name: Node JS Setups
         uses: actions/setup-node@v4
         with:
           node-version: 18
