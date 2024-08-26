@@ -2,9 +2,6 @@ name: solar system
 on:
   workflow_dispatch:
   push:
-    branches:
-      - main
-      - "features/*"
 
 jobs:
   unit_testing:
