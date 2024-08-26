@@ -27,6 +27,17 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{matrix.nodejs_version}}
+      - name: Cache Dependencies
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-modules
+
+      - name: Cache Dependencies
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-modules
 
       - name: Install Dependencies
         run: npm install
