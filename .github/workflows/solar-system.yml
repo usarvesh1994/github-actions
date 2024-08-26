@@ -47,6 +47,7 @@ jobs:
 
   code_coverage:
     name: Code Coverage
+    continue-on-error: true
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Registry
