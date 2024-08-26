@@ -92,14 +92,13 @@ jobs:
       - name: Build Docker docker
         uses: docker/build-push-action@v6
         with:
-          context: .
           push: false
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/solar-system:${{ github.sha }}
 
       - name: Docker Image Check
         run: |
           docker images
-          docker run --name solar-system -d \
+          docker run --rm --name solar-system -d \
             -p 3000:3000 \
             -e MONGO_USERNAME=$MONGO_USERNAME \
             -e MONGO_URI=$MONGO_URI \
@@ -107,5 +106,8 @@ jobs:
             ${{ secrets.DOCKERHUB_USERNAME }}/solar-system:${{ github.sha }}
 
 
-          echo Testing image URL
+          echo "Testing image URL"
           wget -q -O - 127.0.0.1:3000/live | grep live
+          echo "Stopping the container"
+          docker stop solar-system
+          docker rm solar-system
