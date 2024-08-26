@@ -7,8 +7,8 @@ on:
       - features
 env:
   MONGO_URI: "mongodb+svc://supercluster.d83jjmongodb.net/superData"
-  MONGO_USERNAME: ${{MONGO_USERNAME}}
-  MONGO_PASSWORD: ${{MONGO_PASSWORD}}
+  MONGO_USERNAME: ${{vars.MONGO_USERNAME}}
+  MONGO_PASSWORD: ${{secrets.MONGO_PASSWORD}}
 
 jobs:
   unit_testing:
