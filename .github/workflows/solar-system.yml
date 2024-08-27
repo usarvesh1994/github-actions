@@ -130,7 +130,7 @@ jobs:
 
   dev_deploy:
     runs-on: ubuntu-latest
-    needs: [docker_image]
+    needs: []
     steps:
       - name: Checkout Registry
         uses: actions/checkout@v4
@@ -149,6 +149,9 @@ jobs:
         run: |
           aws eks update-kubeconfig --name eksdemo1
           cat ~/.kube/config
+
+      - name: fiels check
+        run: ls -l
 
       - name: Replace placeholders
         uses: cschleiden/replace-tokens@v1
