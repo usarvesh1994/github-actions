@@ -185,7 +185,7 @@ jobs:
     steps:
       - name: Testing Endpoint
         env:
-          URL: ${{needs.docker_image.outputs.APP_URL}}
+          URL: ${{needs.dev_deploy.outputs.APP_URL}}
         run: |
           echo $URL
           curl http://$URL/live | grep -i live
