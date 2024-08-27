@@ -138,7 +138,7 @@ jobs:
         uses: azure/setup-kubectl@v4
 
       - name: Kubectl Config update
-        run: aws eks update-kubeconfig --cluster-name eksdemo1
+        run: aws eks update-kubeconfig --name eksdemo1
 
       - name: deploying
         run: kubectl get node
