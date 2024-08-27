@@ -142,5 +142,23 @@ jobs:
           aws eks update-kubeconfig --name eksdemo1
           cat ~/.kube/config
 
-      - name: deploying
-        run: kubectl get node
+      - name: Replace placeholders
+        uses: cschleiden/replace-tokens@v1
+        with:
+          tokenPrefix: "_{_"
+          tokenSuffix: "_}_"
+          files: '["/kubernetes/development/*.yaml"]'
+        env:
+          NAMESPACE: ${{vars.NAMESPACE}}
+          REPLICAS: ${{vars.REPLICAS}}
+          IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/solar-system:${{ github.sha }}
+
+      - name: Creating secret
+        run: |
+          kubectl create secret generic mongo-db-creds \ 
+          --from-literal=MONGO_URI=${{env.MONGO_URI}} \
+          --from-literal=MONGO_USERNAME=${{env.MONGO_USERNAME}} \
+          --from-literal=MONGO_PASSWORD=${{env.MONGO_PASSWORD}} --dry-run=client -o yaml | kubectl apply -f -
+
+      - name: deploying to DEV Env
+        run: kubectl apply -f /kubernetes/development
