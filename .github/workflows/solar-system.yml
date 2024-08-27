@@ -30,7 +30,7 @@ jobs:
       - name: Cache Dependencies
         uses: actions/cache@v4
         with:
-          path: node_modules
+          path: .node_modules
           key: ${{ runner.os }}-node-modules-${{ hashFiles('package-lock.json')}}
 
       - name: Install Dependencies
@@ -62,11 +62,6 @@ jobs:
     steps:
       - name: Checkout Registry
         uses: actions/checkout@v4
-
-      - name: Node JS Setups
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
 
       - name: Cache Dependencies
         uses: actions/cache@v4
@@ -127,3 +122,23 @@ jobs:
         with:
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/solar-system:${{ github.sha }}
+
+  dev_deploy:
+    runs-on: ubuntu-latest
+    needs: [docker_image]
+    steps:
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-southeast-2
+
+      - name: installing kubectl
+        uses: azure/setup-kubectl@v4
+
+      - name: Kubectl Config update
+        run: aws eks get-token --cluster-name eksdemo1
+
+      - name: deploying
+        run: kubectl get node
