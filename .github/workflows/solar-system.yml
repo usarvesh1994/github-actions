@@ -131,6 +131,8 @@ jobs:
   dev_deploy:
     runs-on: ubuntu-latest
     needs: [docker_image]
+    outputs:
+      APP_URL: ${{steps.fetch-alb.outputs.APP_URL}}
     steps:
       - name: Checkout Registry
         uses: actions/checkout@v4
@@ -171,3 +173,19 @@ jobs:
 
       - name: deploying to DEV Env
         run: kubectl apply -f kubernetes/development
+
+      - name: Fetching LB Address
+        id: fetch-alb
+        run: |
+          echo "APP_URL= $(kubectl -n ${{vars.NAMESPACE}} get ingress solar-system -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')" >> GITHUB_OUTPUT
+
+  test_deploy:
+    runs-on: ubuntu-latest
+    needs: [dev_deploy]
+    steps:
+      - name: Testing Endpoint
+        env:
+          URL: ${{needs.docker_image.outputs.APP_URL}}
+        run: |
+          echo $URL
+          curl http://$URL/live | grep -i live
