@@ -130,7 +130,7 @@ jobs:
 
   dev_deploy:
     runs-on: ubuntu-latest
-    needs: []
+    needs: [docker_image]
     steps:
       - name: Checkout Registry
         uses: actions/checkout@v4
