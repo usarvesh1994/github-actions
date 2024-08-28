@@ -189,7 +189,7 @@ jobs:
     if: github.ref == 'refs/heads/features'
     environment:
       name: Dev
-      url: ${{needs.dev_deploy.outputs.APP_URL}}
+      url: http://${{needs.dev_deploy.outputs.APP_URL}}
     runs-on: ubuntu-latest
     needs: [dev_deploy]
     steps:
