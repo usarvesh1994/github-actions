@@ -169,7 +169,7 @@ jobs:
 
       - name: Creating secret
         run: |
-          kubectl create ns ${{vars.NAMESPACE}}
+          kubectl create ns ${{vars.NAMESPACE}} --dry-run -o yaml | kubectl apply -f -
           kubectl -n ${{vars.NAMESPACE}} create secret generic mongo-db-creds \
           --from-literal=MONGO_URI="${MONGO_URI}" \
           --from-literal=MONGO_USERNAME="${MONGO_USERNAME}" \
