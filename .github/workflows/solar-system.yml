@@ -129,6 +129,10 @@ jobs:
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/solar-system:${{ github.sha }}
 
   dev_deploy:
+    if: github.ref == 'refs/heads/main'
+    environment:
+      name: Dev
+      url: ${{steps.fetch-alb.outputs.APP_URL}}
     runs-on: ubuntu-latest
     needs: [docker_image]
     outputs:
@@ -180,6 +184,10 @@ jobs:
           echo "APP_URL= $(kubectl -n ${{vars.NAMESPACE}} get ingress solar-system -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')" >> $GITHUB_OUTPUT
 
   test_deploy:
+    if: github.ref == 'refs/heads/main'
+    environment:
+      name: Dev
+      url: ${{needs.dev_deploy.outputs.APP_URL}}
     runs-on: ubuntu-latest
     needs: [dev_deploy]
     steps:
