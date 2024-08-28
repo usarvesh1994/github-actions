@@ -252,7 +252,7 @@ jobs:
           --dry-run=client -o yaml | kubectl apply -f -
 
       - name: deploying to Prod Env
-        run: kubectl apply -f kubernetes/development
+        run: kubectl apply -f kubernetes/production
 
       - name: Fetching LB Address
         id: fetch-alb
