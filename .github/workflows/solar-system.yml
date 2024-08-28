@@ -182,6 +182,7 @@ jobs:
       - name: Fetching LB Address
         id: fetch-alb
         run: |
+          sleep 10s
           echo "APP_URL= $(kubectl -n ${{vars.NAMESPACE}} get ingress solar-system -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')" >> $GITHUB_OUTPUT
 
   test_deploy:
