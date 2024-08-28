@@ -90,8 +90,8 @@ jobs:
   #Docker Image
   docker_image:
     runs-on: ubuntu-latest
-    # needs: [code_coverage, unit_testing]
-    needs: []
+    needs: [code_coverage, unit_testing]
+    #needs: []
     steps:
       - name: Checkout Registry
         uses: actions/checkout@v4
