@@ -169,7 +169,8 @@ jobs:
 
       - name: Creating secret
         run: |
-          kubectl create secret generic mongo-db-creds \
+          kubectl create ns ${{vars.NAMESPACE}}
+          kubectl -n ${{vars.NAMESPACE}} create secret generic mongo-db-creds \
           --from-literal=MONGO_URI="${MONGO_URI}" \
           --from-literal=MONGO_USERNAME="${MONGO_USERNAME}" \
           --from-literal=MONGO_PASSWORD="${MONGO_PASSWORD}" \
