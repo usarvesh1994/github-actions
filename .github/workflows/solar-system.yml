@@ -161,6 +161,7 @@ jobs:
   prod_deploy:
     if: github.ref == 'refs/heads/main'
     needs: [docker_image]
+
     uses: ./.github/workflows/reuseable-dep.yml
     with:
       MANIFEST_PATH: kubernetes/production
@@ -170,6 +171,7 @@ jobs:
       AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
       DOCKERHUB_USERNAME: ${{secrets.DOCKERHUB_USERNAME}}
       MONGO_PASSWORD: ${{secrets.MONGO_PASSWORD}}
+
 
   #Production Deploy Testing
   prod_deploy_testing:
