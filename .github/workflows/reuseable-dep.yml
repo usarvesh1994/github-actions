@@ -67,8 +67,9 @@ jobs:
           --from-literal=MONGO_PASSWORD="${{secrets.MONGO_PASSWORD}}" \
           --dry-run=client -o yaml | kubectl apply -f -
 
-      - name: deploying to DEV Env
-        run: kubectl apply -f kubernetes/development
+      - name: deploying
+        run: kubectl apply -f kubernetes/${{inputs.MANIFEST_PATH}}
+
 
       - name: Fetching LB Address
         id: fetch-alb
