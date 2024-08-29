@@ -2,11 +2,8 @@ name: Reusable workflow
 on:
   workflow_call:
     inputs:
-      NAMESPACE:
-        default: dev
-        type: string
-      REPLICAS:
-        default: 1
+      ENVIRONMENT:
+        default: Dev
         type: string
       MANIFEST_PATH:
         default: kubernetes/development
@@ -18,13 +15,15 @@ on:
         required: true
       DOCKERHUB_USERNAME:
         required: true
+      MONGO_PASSWORD:
+        required: true
     outputs:
       APP_URL:
         value: ${{jobs.dev_deploy.outputs.APP_URL}}
 jobs:
   dev_deploy:
     environment:
-      name: Dev
+      name: ${{inputs.ENVIRONMENT}}
       url: http://${{steps.fetch-alb.outputs.APP_URL}}
     runs-on: ubuntu-latest
     outputs:
@@ -55,17 +54,17 @@ jobs:
           tokenSuffix: "_}_"
           files: '["${{inputs.MANIFEST_PATH}}/*.yaml"]'
         env:
-          NAMESPACE: ${{inputs.NAMESPACE}}
-          REPLICAS: ${{inputs.REPLICAS}}
+          NAMESPACE: ${{vars.NAMESPACE}}
+          REPLICAS: ${{vars.REPLICAS}}
           IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/solar-system:${{ github.sha }}
 
       - name: Creating secret
         run: |
-          kubectl create ns ${{inputs.NAMESPACE}} --dry-run -o yaml | kubectl apply -f -
-          kubectl -n ${{inputs.NAMESPACE}} create secret generic mongo-db-creds \
-          --from-literal=MONGO_URI="${MONGO_URI}" \
-          --from-literal=MONGO_USERNAME="${MONGO_USERNAME}" \
-          --from-literal=MONGO_PASSWORD="${MONGO_PASSWORD}" \
+          kubectl create ns ${{vars.NAMESPACE}} --dry-run -o yaml | kubectl apply -f -
+          kubectl -n ${{vars.NAMESPACE}} create secret generic mongo-db-creds \
+          --from-literal=MONGO_URI="${{vars.MONGO_URI}}" \
+          --from-literal=MONGO_USERNAME="${{vars.MONGO_USERNAME}}" \
+          --from-literal=MONGO_PASSWORD="${{secrets.MONGO_PASSWORD}}" \
           --dry-run=client -o yaml | kubectl apply -f -
 
       - name: deploying to DEV Env
@@ -75,4 +74,4 @@ jobs:
         id: fetch-alb
         run: |
           sleep 15s
-          echo "APP_URL= $(kubectl -n ${{inputs.NAMESPACE}} get ingress solar-system -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')" >> $GITHUB_OUTPUT
+          echo "APP_URL= $(kubectl -n ${{vars.NAMESPACE}} get ingress solar-system -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')" >> $GITHUB_OUTPUT
