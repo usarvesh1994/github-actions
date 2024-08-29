@@ -7,7 +7,7 @@ on:
         type: string
       REPLICAS:
         default: 1
-        type: number
+        type: string
       MANIFEST_PATH:
         default: kubernetes/development
         type: string
