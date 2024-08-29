@@ -134,6 +134,7 @@ jobs:
   #Development Deploy
   dev_deploy:
     if: github.ref == 'refs/heads/features'
+    needs: [docker_image]
     uses: ./.github/workflows/reuseable-dep.yml
     with:
       NAMESPACE: ${{vars.NAMESPACE}}
