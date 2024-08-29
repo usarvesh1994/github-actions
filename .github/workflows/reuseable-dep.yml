@@ -70,6 +70,7 @@ jobs:
       - name: deploying
         run: kubectl apply -f ${{inputs.MANIFEST_PATH}}
 
+
       - name: Fetching LB Address
         id: fetch-alb
         run: |
