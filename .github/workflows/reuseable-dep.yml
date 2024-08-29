@@ -68,7 +68,7 @@ jobs:
           --dry-run=client -o yaml | kubectl apply -f -
 
       - name: deploying
-        run: kubectl apply -f kubernetes/${{inputs.MANIFEST_PATH}}
+        run: kubectl apply -f ${{inputs.MANIFEST_PATH}}
 
       - name: Fetching LB Address
         id: fetch-alb
