@@ -6,6 +6,7 @@ on:
       - main
       - features
 env:
+  MONGO_URI: ${{vars.MONGO_URI}}
   MONGO_PASSWORD: ${{secrets.MONGO_PASSWORD}}
 
 jobs:
